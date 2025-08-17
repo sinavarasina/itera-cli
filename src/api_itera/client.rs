@@ -1,8 +1,7 @@
 use crate::api_itera::endpoints;
 use crate::api_itera::error::ApiError;
 use crate::api_itera::models::{
-    KelasListResponse, PresensiDataResponse, PresensiKelasErrorResponse,
-    PresensiKelasSuccessResponse, UserData,
+    KelasListResponse, PresensiDataResponse, PresensiResponse, UserData,
 };
 use reqwest::Client;
 
@@ -109,22 +108,12 @@ impl IteraAPI {
         let response =
             endpoints::presensi::send_presence_token(&self.client, nim, presensi_token).await?;
 
-        let status = response.status();
+        match response.json::<PresensiResponse>().await {
+            Ok(json_response) => Ok(json_response.msg),
 
-        if status.is_success() {
-            match response.json::<PresensiKelasSuccessResponse>().await {
-                Ok(success_response) => Ok(success_response.meta.message),
-                Err(_) => Err(ApiError::ApiMessage(
-                    "Getting response but failed to parse.".to_string(),
-                )),
-            }
-        } else {
-            match response.json::<PresensiKelasErrorResponse>().await {
-                Ok(err_response) => Ok(err_response.msg),
-                Err(_) => Err(ApiError::ApiMessage(
-                    "Getting response but failed to parse.".to_string(),
-                )),
-            }
+            Err(_) => Err(ApiError::ApiMessage(
+                "Failed to parse API response message".to_string(),
+            )),
         }
     }
 }

@@ -20,11 +20,6 @@ pub struct PresensiDataResponse {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct PresensiKelasErrorResponse {
+pub struct PresensiResponse {
     pub msg: String,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct PresensiKelasSuccessResponse {
-    pub meta: Meta,
 }
