@@ -1,0 +1,30 @@
+use crate::api_itera::models::Meta;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub struct Presensi {
+    pub no_pertemuan: u8,
+    pub pertemuan: String,
+    pub waktu_mulai: String,
+    pub mhs_masuk: String,
+    pub mhs_tdkmasuk: String,
+    pub mhs_jumlah: String,
+    pub absen_mahasiswa: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct PresensiDataResponse {
+    pub meta: Meta,
+    pub data: Vec<Presensi>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct PresensiKelasErrorResponse {
+    pub msg: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct PresensiKelasSuccessResponse {
+    pub meta: Meta,
+}
