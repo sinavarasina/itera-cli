@@ -1,3 +1,6 @@
+pub mod account;
+pub mod course;
+pub mod presence;
 use clap::{Parser, Subcommand};
 
 #[derive(Debug, Parser)]
@@ -9,15 +12,24 @@ pub struct Cli {
 
 #[derive(Debug, Subcommand, Clone)]
 pub enum Commands {
-    #[command(subcommand)]
+    #[command(subcommand, about = "Account related commands")]
     Account(AccountCommands),
+    //    Heavily WIP
+    //    #[command(subcommand, about = "Courses related commands")]
+    //    Course(CourseCommand),
+    //    #[command(subcommand, about = "presence related commands")]
+    //    Presence(PresenceCommands),
     Exit,
 }
 
 #[derive(Debug, Subcommand, Clone)]
 pub enum AccountCommands {
     Login {
-        #[arg(long)]
+        #[arg(
+            short,
+            long,
+            help = "input email for login in directly command args (optional)"
+        )]
         email: Option<String>,
 
         #[clap(skip)]
@@ -27,6 +39,26 @@ pub enum AccountCommands {
     Status,
 }
 
-pub mod account;
-pub mod presence;
-pub mod subject;
+#[derive(Debug, Subcommand, Clone)]
+pub enum PresenceCommands {
+    List,
+    Submit {
+        #[arg(
+            short,
+            long,
+            help = "specify nim to submit the presence token (optional for logged user)"
+        )]
+        nim: Option<String>,
+        #[arg(
+            short,
+            long,
+            help = "input token for class you want to get presence/attend"
+        )]
+        token: Option<String>,
+    },
+}
+
+#[derive(Debug, Subcommand, Clone)]
+pub enum CourseCommand {
+    List,
+}

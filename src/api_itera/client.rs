@@ -25,10 +25,10 @@ impl IteraAPI {
         }
     }
 
-    pub async fn login(&mut self, username: &str, password: &str) -> Result<(), ApiError> {
+    pub async fn login(&mut self, email: &str, password: &str) -> Result<(), ApiError> {
         let (device, device_id) = (self.device_info.0.as_str(), self.device_info.1.as_str());
         let response =
-            endpoints::auth::login(&self.client, username, password, device, device_id).await?;
+            endpoints::auth::login(&self.client, email, password, device, device_id).await?;
 
         if !response.meta.status {
             return Err(ApiError::ApiMessage(response.meta.message));
