@@ -50,6 +50,10 @@ impl IteraAPI {
         self.auth.as_ref()
     }
 
+    pub fn get_logged_name(&self) -> Option<&str> {
+        self.auth.as_ref().map(|user_data| user_data.nama.as_str())
+    }
+
     pub fn get_logged_nim(&self) -> Option<&str> {
         self.auth
             .as_ref()
