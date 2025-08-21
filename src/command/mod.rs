@@ -1,7 +1,7 @@
 pub mod account;
 pub mod course;
 pub mod presence;
-use clap::{Parser, Subcommand};
+use clap::{ArgGroup, Parser, Subcommand};
 
 #[derive(Debug, Parser)]
 #[command(name = "itera-cli", version)]
@@ -42,7 +42,26 @@ pub enum AccountCommands {
 
 #[derive(Debug, Subcommand, Clone)]
 pub enum PresenceCommands {
-    List,
+    #[command(
+        group(
+            ArgGroup::new("search")
+            .args(
+                &["by_code", "by_name"]
+                ).required(true).multiple(false)
+            )
+        )]
+    List {
+        #[arg(
+            long,
+            help = "using class code (you can find out by using Course List command)"
+        )]
+        by_code: Option<String>,
+        #[arg(
+            long,
+            help = "search by class name (the name must exact same as in the database"
+        )]
+        by_name: Option<String>,
+    },
     Submit {
         #[arg(
             short,

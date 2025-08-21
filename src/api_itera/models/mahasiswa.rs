@@ -6,9 +6,13 @@ use serde::{Deserialize, Serialize};
 pub struct Kelas {
     pub nomor_mk: String,
     pub kode_mk: String,
+    pub kode_kelas: String,
+    pub nama_kelas: String,
+    pub mode: String,
     pub nama_mk: String,
     pub sks_mk: String,
     pub nama_dosen_list: String,
+    pub jadwal_hari: String,
 }
 
 #[derive(Debug, Deserialize)]
