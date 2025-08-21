@@ -25,6 +25,7 @@ pub enum Commands {
 
 #[derive(Debug, Subcommand, Clone)]
 pub enum AccountCommands {
+    #[command(about = "login with SSO account to access some command that require Auth/Token")]
     Login {
         #[arg(
             short,
@@ -36,7 +37,9 @@ pub enum AccountCommands {
         #[clap(skip)]
         password: Option<String>,
     },
+    #[command(about = "delete login information")]
     Logout,
+    #[command(about = "check your account status")]
     Status,
 }
 
@@ -80,5 +83,6 @@ pub enum PresenceCommands {
 
 #[derive(Debug, Subcommand, Clone)]
 pub enum CourseCommand {
+    #[command(about = "get class list")]
     List,
 }

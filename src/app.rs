@@ -113,13 +113,17 @@ async fn run_ui_task(
                         let (final_email, final_password) =
                             tokio::task::spawn_blocking(move || {
                                 let email_to_use = email.unwrap_or_else(|| {
-                                    print!("Email: ");
+                                    print!("{}: ", "Email".yellow());
                                     std::io::stdout().flush().unwrap();
                                     let mut buffer = String::new();
                                     std::io::stdin().read_line(&mut buffer).unwrap();
                                     buffer.trim().to_string()
                                 });
-                                println!("Password for {}:", email_to_use.green());
+                                println!(
+                                    "{} for {}:",
+                                    "Password".yellow(),
+                                    email_to_use.green().underline()
+                                );
                                 let password_to_use = rpassword::prompt_password("").unwrap();
                                 (email_to_use, password_to_use)
                             })
