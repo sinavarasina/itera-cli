@@ -1,4 +1,5 @@
 use crate::api_itera::client::IteraAPI;
+use owo_colors::OwoColorize;
 
 pub async fn handle_login(itera_api_client: &mut IteraAPI, email: String, password: String) {
     println!("Trying to loggin ...");
@@ -18,14 +19,18 @@ pub fn handle_logout(itera_api_client: &mut IteraAPI) {
 }
 
 pub fn handle_status(itera_api_client: &IteraAPI) {
-    if let (Some(name), Some(nim)) = (
+    if let (Some(name), Some(nim), Some(prodi)) = (
         itera_api_client.get_logged_name(),
         itera_api_client.get_logged_nim(),
+        itera_api_client.get_logged_prodi(),
     ) {
-        println!("Status Login: true");
-        println!("  Nama: {}", name);
-        println!("  NIM : {}", nim);
+        println!("{}", "[Status]".black().on_green());
+        println!("{}\t: {}", "Login".yellow(), "true".green());
+        println!("{}\t: {}", "Nama".yellow(), name.blue());
+        println!("{}\t: {}", "NIM".yellow(), nim.blue());
+        println!("{}\t: {}", "Prodi".yellow(), prodi.blue());
     } else {
-        println!("Status Login: false");
+        println!("{}", "[Status]".black().on_red());
+        println!("{} : {}", "Login".yellow(), "false".red());
     }
 }

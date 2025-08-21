@@ -60,6 +60,10 @@ impl IteraAPI {
             .map(|user_data| user_data.nimnrk.as_str())
     }
 
+    pub fn get_logged_prodi(&self) -> Option<&str> {
+        self.auth.as_ref().map(|user_data| user_data.unit.as_str())
+    }
+
     pub async fn get_mahasiswa_kelas(&self) -> Result<KelasListResponse, ApiError> {
         if let Some(auth_data) = &self.auth {
             let response = endpoints::mahasiswa::get_kelas(

@@ -19,6 +19,7 @@ pub enum Commands {
     //    Course(CourseCommand),
     //    #[command(subcommand, about = "presence related commands")]
     //    Presence(PresenceCommands),
+    #[command(about = "Close the app")]
     Exit,
 }
 

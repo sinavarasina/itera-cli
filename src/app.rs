@@ -1,6 +1,7 @@
 use crate::api_itera::IteraAPI;
 use crate::command::{AccountCommands, Cli, Commands, account};
 use clap::Parser;
+use owo_colors::OwoColorize;
 use rustyline::DefaultEditor;
 use rustyline::error::ReadlineError;
 use std::io::Write;
@@ -8,10 +9,14 @@ use std::sync::Arc;
 use tokio::sync::{Mutex, mpsc, oneshot};
 
 pub async fn run(itera_api_client: IteraAPI) {
-    println!(
-        "itera-cli - Yet an unofficial Command-Line Interface (CLI) app for managing academic activities at ITERA."
+    println!("{}",
+        "itera-cli - Yet an unofficial Command-Line Interface (CLI) app for managing academic activities at ITERA.".yellow()
     );
-    println!("type 'help' to see Command List, 'exit' to close the app");
+    println!(
+        "type '{}' to see Command List, '{}' to close the app",
+        "help".green(),
+        "exit".red()
+    );
 
     let (tx, mut rx) = mpsc::channel::<(Commands, oneshot::Sender<()>)>(32);
     let shared_client = Arc::new(Mutex::new(itera_api_client));
@@ -42,7 +47,7 @@ pub async fn run(itera_api_client: IteraAPI) {
                     }
                 },
                 Commands::Exit => {
-                    println!("Close the app...");
+                    println!("{}", "Close the app...".red());
                     ui_handle.abort();
                 }
             }
@@ -64,8 +69,8 @@ async fn run_ui_task(
         let prompt = {
             let client_guard = itera_api_client.lock().await;
             match client_guard.get_logged_nim() {
-                Some(nim) => format!("Itera-cli ({})> ", nim),
-                None => "itera-cli ()> ".to_string(),
+                Some(nim) => format!("{} ({})> ", "itera-cli".blue(), nim.green()),
+                None => format!("{} ()> ", "itera-cli".blue()),
             }
         };
 
@@ -114,7 +119,7 @@ async fn run_ui_task(
                                     std::io::stdin().read_line(&mut buffer).unwrap();
                                     buffer.trim().to_string()
                                 });
-                                println!("Password for {}:", email_to_use);
+                                println!("Password for {}:", email_to_use.green());
                                 let password_to_use = rpassword::prompt_password("").unwrap();
                                 (email_to_use, password_to_use)
                             })
