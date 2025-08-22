@@ -1,5 +1,5 @@
 use crate::api_itera::IteraAPI;
-use crate::command::{AccountCommands, Cli, Commands, account};
+use crate::command::{AccountCommands, Cli, Commands, CourseCommand, account, course};
 use clap::Parser;
 use owo_colors::OwoColorize;
 use rustyline::DefaultEditor;
@@ -46,6 +46,13 @@ pub async fn run(itera_api_client: IteraAPI) {
                         account::handle_status(&*client_guard);
                     }
                 },
+                Commands::Course(course_cmd) => match course_cmd {
+                    CourseCommand::List { style } => {
+                        let style = style.as_deref().unwrap_or("json");
+                        course::handle_list_courses(&*client_guard, style).await;
+                    }
+                },
+
                 Commands::Exit => {
                     println!("{}", "Close the app...".red());
                     ui_handle.abort();

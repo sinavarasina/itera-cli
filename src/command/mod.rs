@@ -15,8 +15,8 @@ pub enum Commands {
     #[command(subcommand, about = "Account related commands")]
     Account(AccountCommands),
     //    Heavily WIP
-    //    #[command(subcommand, about = "Courses related commands")]
-    //    Course(CourseCommand),
+    #[command(subcommand, about = "Courses related commands")]
+    Course(CourseCommand),
     //    #[command(subcommand, about = "presence related commands")]
     //    Presence(PresenceCommands),
     #[command(about = "Close the app")]
@@ -61,7 +61,7 @@ pub enum PresenceCommands {
         by_code: Option<String>,
         #[arg(
             long,
-            help = "search by class name (the name must exact same as in the database"
+            help = "search by class name (the name must exact same as in the database)"
         )]
         by_name: Option<String>,
     },
@@ -84,5 +84,8 @@ pub enum PresenceCommands {
 #[derive(Debug, Subcommand, Clone)]
 pub enum CourseCommand {
     #[command(about = "get class list")]
-    List,
+    List {
+        #[arg(short, long, help = "to format the output be the same as you desire")]
+        style: Option<String>,
+    },
 }
