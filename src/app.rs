@@ -1,5 +1,7 @@
 use crate::api_itera::IteraAPI;
-use crate::command::{AccountCommands, Cli, Commands, CourseCommand, account, course};
+use crate::command::{
+    AccountCommands, Cli, Commands, CourseCommand, PresenceCommands, account, course, presence,
+};
 use clap::Parser;
 use owo_colors::OwoColorize;
 use rustyline::DefaultEditor;
@@ -50,6 +52,19 @@ pub async fn run(itera_api_client: IteraAPI) {
                     CourseCommand::List { style } => {
                         let style = style.as_deref().unwrap_or("json");
                         course::handle_list_courses(&*client_guard, style).await;
+                    }
+                },
+                Commands::Presence(presence_cmd) => match presence_cmd {
+                    PresenceCommands::Submit { token, nim } => {
+                        presence::handle_submit(&*client_guard, nim, token).await;
+                    }
+                    PresenceCommands::List {
+                        by_id,
+                        by_name,
+                        style,
+                    } => {
+                        let style = style.as_deref().unwrap_or("json");
+                        presence::handle_presence_list(&*client_guard, by_id, by_name, style).await;
                     }
                 },
 

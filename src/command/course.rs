@@ -17,6 +17,10 @@ pub async fn handle_list_courses(itera_api_client: &IteraAPI, style: &str) {
                     let style = Style::modern();
                     println!("{}", Table::new(&courses).with(style));
                 }
+                "table_rounded" => {
+                    let style = Style::rounded();
+                    println!("{}", Table::new(&courses).with(style));
+                }
                 "json" | _ => match serde_json::to_string_pretty(&courses) {
                     Ok(json_string) => {
                         println!("{}", json_string);

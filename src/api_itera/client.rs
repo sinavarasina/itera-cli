@@ -84,15 +84,15 @@ impl IteraAPI {
         }
     }
 
-    pub async fn get_presentasi_kelas(
+    pub async fn get_presensi_kelas(
         &self,
         kelas_id: &str,
     ) -> Result<PresensiDataResponse, ApiError> {
         if let Some(auth_data) = &self.auth {
             let response = endpoints::presensi::get_data_mahasiswa(
                 &self.client,
-                &auth_data.nimnrk,
                 &auth_data.token,
+                &auth_data.nimnrk,
                 kelas_id,
                 &self.device_info.1,
             )

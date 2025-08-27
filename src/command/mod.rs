@@ -1,7 +1,8 @@
+use clap::{Parser, Subcommand};
+
 pub mod account;
 pub mod course;
 pub mod presence;
-use clap::{ArgGroup, Parser, Subcommand};
 
 #[derive(Debug, Parser)]
 #[command(name = "itera-cli", version)]
@@ -14,11 +15,10 @@ pub struct Cli {
 pub enum Commands {
     #[command(subcommand, about = "Account related commands")]
     Account(AccountCommands),
-    //    Heavily WIP
     #[command(subcommand, about = "Courses related commands")]
     Course(CourseCommand),
-    //    #[command(subcommand, about = "presence related commands")]
-    //    Presence(PresenceCommands),
+    #[command(subcommand, about = "presence related commands")]
+    Presence(PresenceCommands),
     #[command(about = "Close the app")]
     Exit,
 }
@@ -45,26 +45,30 @@ pub enum AccountCommands {
 
 #[derive(Debug, Subcommand, Clone)]
 pub enum PresenceCommands {
-    #[command(
-        group(
-            ArgGroup::new("search")
-            .args(
-                &["by_code", "by_name"]
-                ).required(true).multiple(false)
-            )
-        )]
+    #[command(about = "List presence status for a class")]
     List {
         #[arg(
             long,
-            help = "using class code (you can find out by using Course List command)"
+            help = "Search by course ID",
+            conflicts_with = "by_name",
+            required = true
         )]
-        by_code: Option<String>,
+        by_id: Option<String>,
         #[arg(
             long,
-            help = "search by class name (the name must exact same as in the database)"
+            help = "Search by course name",
+            conflicts_with = "by_id",
+            required = true
         )]
         by_name: Option<String>,
+        #[arg(
+            short,
+            long,
+            help = "Output format: table, table_rounded, or json (default)"
+        )]
+        style: Option<String>,
     },
+    #[command(about = "submit token from QR code to get presence status in class")]
     Submit {
         #[arg(
             short,
@@ -85,7 +89,11 @@ pub enum PresenceCommands {
 pub enum CourseCommand {
     #[command(about = "get class list")]
     List {
-        #[arg(short, long, help = "to format the output be the same as you desire")]
+        #[arg(
+            short,
+            long,
+            help = "to format the output be the same as you desire (table, table_rounded, json <default>))"
+        )]
         style: Option<String>,
     },
 }
